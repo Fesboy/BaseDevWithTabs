@@ -1,6 +1,6 @@
-# BaseDevWithTabs
+# page-marker-base
 
-Initial a base development layout with tabs.
+Initial a base development layout with page marker.
 
 ### issues
 
