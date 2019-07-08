@@ -1,11 +1,12 @@
-import React from "react";
+import React, { memo } from "react";
+import PropTypes from "prop-types";
 import { Menu } from "antd";
 
 import styles from "./index.less";
 
 const MenuItem = Menu.Item;
 
-export default function Sider({ menus, selectedMenus, onMenuChange }) {
+function Sider({ menus, selectedMenus, onMenuChange }) {
   return (
     <div className={styles.sider}>
       <Menu selectedKeys={selectedMenus} onClick={onMenuChange}>
@@ -16,3 +17,11 @@ export default function Sider({ menus, selectedMenus, onMenuChange }) {
     </div>
   );
 }
+
+Sider.propTypes = {
+  menus: PropTypes.array,
+  selectedMenus: PropTypes.array,
+  onMenuChange: PropTypes.func
+};
+
+export default memo(Sider);

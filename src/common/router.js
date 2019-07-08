@@ -14,7 +14,14 @@ const routeConfig = [
   {
     path: "/list",
     name: "list",
-    component: () => import("../pages/list")
+    component: () => import("../pages/list"),
+    routes: [
+      {
+        path: "/detail",
+        name: "detail",
+        component: () => import("../pages/list/detail")
+      }
+    ]
   }
 ];
 

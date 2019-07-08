@@ -1,8 +1,0 @@
-@font-face {
-  font-family: "Cartoon";
-  src: url("./assets/fonts/cartoon.ttf") format("ttf");
-}
-
-body {
-  font-family: "Cartoon";
-}

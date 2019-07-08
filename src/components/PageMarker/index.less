@@ -12,7 +12,7 @@
   }
   &::after {
     content: " ";
-    width: 10px;
+    width: 30px;
     display: inline-block;
     border-bottom: 1px solid #e8e8e8;
     position: absolute;
@@ -21,7 +21,7 @@
   }
   :global {
     .ant-tabs {
-      width: 100%;
+      width: ~"calc(100% - 20px)";
       .ant-tabs-card-bar {
         margin-bottom: 8px;
         .ant-tabs-nav-container {
@@ -33,5 +33,14 @@
         }
       }
     }
+  }
+  .remove {
+    width: 20px;
+    font-size: 18px;
+    line-height: 28px;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
   }
 }

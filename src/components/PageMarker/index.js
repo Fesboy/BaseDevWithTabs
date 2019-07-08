@@ -1,5 +1,12 @@
-import React, { Suspense, useState, useEffect, useCallback } from "react";
-import { Tabs } from "antd";
+import React, {
+  memo,
+  Suspense,
+  useState,
+  useEffect,
+  useCallback,
+  useRef
+} from "react";
+import { Tabs, Icon, Tooltip } from "antd";
 
 import { LazyLoader } from "@/components";
 import history from "@/common/history";
@@ -12,22 +19,32 @@ function render(Component) {
   return <Component />;
 }
 
-export default function PageMarker() {
+function PageMarker() {
   const { pathname } = history.location;
-  const [activeTab, setActiveTab] = useState(pathname);
-  const [openPaths, setOpenPaths] = useState([pathname]);
+
+  const [activePage, setActivePage] = useState(pathname);
+  const [markPages, setMarkPages] = useState([pathname]);
+
+  const activePageRef = useRef(activePage);
+  const markPagesRef = useRef(markPages);
 
   useEffect(() => {
-    function handlePath(location) {
-      const { pathname } = location;
-      if (!openPaths.includes(pathname)) {
-        setOpenPaths([...openPaths, pathname]);
-      }
-      setActiveTab(location.pathname);
-    }
+    activePageRef.current = activePage;
+    markPagesRef.current = markPages;
+  });
 
-    return history.listen(handlePath);
-  }, [openPaths]);
+  const handleHistoryChange = useCallback(
+    location => {
+      const { pathname } = location;
+      if (!markPagesRef.current.includes(pathname)) {
+        setMarkPages([...markPagesRef.current, pathname]);
+      }
+      setActivePage(pathname);
+    },
+    [markPagesRef]
+  );
+
+  useEffect(() => history.listen(handleHistoryChange), [handleHistoryChange]);
 
   const handleTabChange = useCallback(key => {
     history.push(key);
@@ -35,19 +52,24 @@ export default function PageMarker() {
 
   const handleEditTab = useCallback(
     key => {
-      const currentIndex = openPaths.findIndex(path => path === key);
-      const leftTab = openPaths[currentIndex - 1];
-      const rightTab = openPaths[currentIndex + 1];
-      setOpenPaths(openPaths.filter(path => path !== key));
+      const currentIndex = markPagesRef.current.findIndex(path => path === key);
+      const leftTab = markPagesRef.current[currentIndex - 1];
+      const rightTab = markPagesRef.current[currentIndex + 1];
+      setMarkPages(markPagesRef.current.filter(path => path !== key));
 
-      if (activeTab === key) {
-        setActiveTab(leftTab || rightTab);
+      if (activePageRef.current === key) {
+        history.push(leftTab || rightTab);
       }
     },
-    [openPaths, activeTab]
+    [markPagesRef, activePageRef]
   );
 
-  const closable = openPaths.length > 1;
+  const handleRemoveOtherPages = useCallback(() => {
+    if (markPagesRef.current.length === 1) return;
+    setMarkPages([history.location.pathname]);
+  }, [markPagesRef]);
+
+  const closable = markPages.length > 1;
 
   return (
     <div className={styles.pageMarker}>
@@ -55,11 +77,11 @@ export default function PageMarker() {
         type="editable-card"
         animated={false}
         hideAdd
-        activeKey={activeTab}
+        activeKey={activePage}
         onChange={handleTabChange}
         onEdit={handleEditTab}
       >
-        {openPaths.map(path => (
+        {markPages.map(path => (
           <TabPane key={path} tab={menusMap[path]} closable={closable}>
             <Suspense fallback={<LazyLoader />}>
               {render(routesMap[path].component)}
@@ -67,6 +89,15 @@ export default function PageMarker() {
           </TabPane>
         ))}
       </Tabs>
+      <Tooltip placement="topRight" title="关闭其他">
+        <Icon
+          className={styles.remove}
+          type="delete"
+          onClick={handleRemoveOtherPages}
+        />
+      </Tooltip>
     </div>
   );
 }
+
+export default memo(PageMarker);
