@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
-    vendors: ["react", "react-dom", "prop-types", "history"]
+    vendors: ["react", "@hot-loader/react-dom", "prop-types", "history"]
   },
   output: {
     path: path.resolve(__dirname, "../dll"),

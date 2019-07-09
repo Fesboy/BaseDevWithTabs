@@ -6,6 +6,7 @@ Initial a base development layout with page marker.
 
 - 为啥字体修改没生效？
 - 热替换后会报错？
+- 热替换有 bug？
 
 ### todo
 

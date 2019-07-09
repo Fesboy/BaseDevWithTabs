@@ -12,13 +12,9 @@ module.exports = merge(base, {
     hot: true,
     historyApiFallback: true,
     compress: true,
-    overlay: {
-      errors: true
-    },
     before: function(app) {
-      if (process.env.MOCK === "true") {
-        mockProxy(app);
-      }
+      // 请求本地时，即路径以 **/** 开头，自动被 mockProxy 拦截
+      mockProxy(app);
     }
   },
   plugins: [new webpack.HotModuleReplacementPlugin()]

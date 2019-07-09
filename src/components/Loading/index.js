@@ -3,9 +3,9 @@ import { Spin } from "antd";
 
 import styles from "./index.less";
 
-export default function LazyLoader() {
+export default function Loading() {
   return (
-    <div className={styles.lazyLoader}>
+    <div className={styles.loading}>
       <Spin spinning />
     </div>
   );

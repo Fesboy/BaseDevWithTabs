@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Tabs, Icon, Tooltip } from "antd";
 
-import { LazyLoader } from "@/components";
+import { Loading } from "@/components";
 import history from "@/common/history";
 import { routesMap, menusMap } from "@/common/router";
 import styles from "./index.less";
@@ -83,7 +83,7 @@ function PageMarker() {
       >
         {markPages.map(path => (
           <TabPane key={path} tab={menusMap[path]} closable={closable}>
-            <Suspense fallback={<LazyLoader />}>
+            <Suspense fallback={<Loading />}>
               {render(routesMap[path].component)}
             </Suspense>
           </TabPane>

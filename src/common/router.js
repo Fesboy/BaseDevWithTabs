@@ -15,21 +15,28 @@ const routeConfig = [
     path: "/list",
     name: "list",
     component: () => import("../pages/list"),
-    routes: [
+    children: [
       {
         path: "/detail",
         name: "detail",
+        hideInMenu: true,
         component: () => import("../pages/list/detail")
       }
     ]
   }
 ];
 
-function getRoutes(routes) {
+function getRoutes(routes, parentPath = "") {
   return routes.map(route => {
-    const { component } = route;
+    const { path, component, children } = route;
+    const completePath = parentPath + path;
+    if (children) {
+      route.children = getRoutes(children, completePath);
+    }
+
     return {
       ...route,
+      path: completePath,
       component: lazy(component)
     };
   });
@@ -37,24 +44,32 @@ function getRoutes(routes) {
 
 function getRoutesMap(routes) {
   return routes.reduce((prev, route) => {
-    const { path } = route;
+    const { path, children } = route;
+    if (children) {
+      Object.assign(prev, getRoutesMap(children));
+    }
     return (prev[path] = route), prev;
   }, {});
 }
 
-function getMenus(routes) {
+function getMenus(routes, parentPath = "") {
   return routes.map(route => {
-    const { path, name } = route;
-    return {
-      path,
-      name
-    };
+    const { path, name, children } = route;
+    const completePath = parentPath + path;
+    const menu = { path: completePath, name };
+    if (children && children.some(item => !item.hideInMenu)) {
+      menu.children = getMenus(children, completePath);
+    }
+    return menu;
   });
 }
 
 function getMenusMap(menus) {
   return menus.reduce((prev, menu) => {
-    const { path, name } = menu;
+    const { path, name, children } = menu;
+    if (children && children.some(item => !item.hideInMenu)) {
+      Object.assign(prev, getMenusMap(children));
+    }
     return (prev[path] = name), prev;
   }, {});
 }
