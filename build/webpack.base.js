@@ -22,7 +22,12 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: /src/,
-        use: "babel-loader"
+        use: {
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true
+          }
+        }
       },
       {
         test: /\.less$/,
