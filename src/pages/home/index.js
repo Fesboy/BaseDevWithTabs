@@ -1,16 +1,23 @@
 import React, { useEffect } from "react";
+import { connect } from "dva";
+import { Spin } from "antd";
 
 import styles from "./index.less";
 
-export default function Home() {
+function Home({ home, loading, dispatch }) {
   useEffect(() => {
     console.log("home 页面发起请求");
-    fetch("/api/user/name")
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-      });
+    dispatch({
+      type: "home/fetchUser"
+    });
   }, []);
 
-  return <div className={styles.home}>Home Page(fetch api)</div>;
+  return (
+    <div className={styles.home}>
+      Home Page(fetch api)(username:{" "}
+      {loading.effects["home/fetchUser"] ? <Spin /> : home.user.name})
+    </div>
+  );
 }
+
+export default connect(({ home, loading }) => ({ home, loading }))(Home);

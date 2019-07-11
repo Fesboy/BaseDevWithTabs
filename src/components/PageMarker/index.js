@@ -10,7 +10,7 @@ import { Tabs, Icon, Tooltip } from "antd";
 
 import { Loading } from "@/components";
 import history from "@/common/history";
-import { routesMap, menusMap } from "@/common/router";
+import { routesMap } from "@/common/router";
 import styles from "./index.less";
 
 const TabPane = Tabs.TabPane;
@@ -82,7 +82,7 @@ function PageMarker() {
         onEdit={handleEditTab}
       >
         {markPages.map(path => (
-          <TabPane key={path} tab={menusMap[path]} closable={closable}>
+          <TabPane key={path} tab={routesMap[path].name} closable={closable}>
             <Suspense fallback={<Loading />}>
               {render(routesMap[path].component)}
             </Suspense>

@@ -1,7 +1,22 @@
+import "babel-polyfill";
 import "react-hot-loader";
-import React from "react";
-import ReactDOM from "react-dom";
+import dva from "dva";
+import createLoading from "dva-loading";
 
+import history from "@/common/history";
 import App from "./App";
+import home from "@/models/home";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const app = dva({
+  history
+});
+
+app.use(createLoading());
+
+app.router(App);
+
+app.model(home);
+
+app.start("#root");
+
+export default app;

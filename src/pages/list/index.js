@@ -1,11 +1,23 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect, useCallback } from "react";
 
+import history from "@/common/history";
 import styles from "./index.less";
 
-export default function List() {
+function List() {
   useEffect(() => {
     console.log("list 页面发起请求");
   }, []);
 
-  return <div className={styles.list}>List Page</div>;
+  const goToDetail = useCallback(() => {
+    history.push("/list/detail");
+  }, []);
+
+  return (
+    <div className={styles.list}>
+      List Page
+      <p onClick={goToDetail}>go to detail</p>
+    </div>
+  );
 }
+
+export default memo(List);

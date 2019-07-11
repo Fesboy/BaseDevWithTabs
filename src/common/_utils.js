@@ -37,13 +37,3 @@ export function getMenus(routes, parentPath = "") {
     return menu;
   });
 }
-
-export function getMenusMap(menus) {
-  return menus.reduce((prev, menu) => {
-    const { path, name, children } = menu;
-    if (children && children.some(item => !item.hideInMenu)) {
-      Object.assign(prev, getMenusMap(children));
-    }
-    return (prev[path] = name), prev;
-  }, {});
-}

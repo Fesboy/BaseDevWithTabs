@@ -1,9 +1,10 @@
-import { getRoutes, getRoutesMap, getMenus, getMenusMap } from "./_utils";
+import { getRoutes, getRoutesMap, getMenus } from "./_utils";
 
 const routeConfig = [
   {
     path: "/",
     name: "home",
+    models: ["home"],
     component: () => import("../pages/home")
   },
   {
@@ -29,4 +30,3 @@ const routeConfig = [
 export const routes = getRoutes(routeConfig);
 export const routesMap = getRoutesMap(routes);
 export const menus = getMenus(routeConfig);
-export const menusMap = getMenusMap(menus);

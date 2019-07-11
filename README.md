@@ -10,6 +10,4 @@ Initial a base development layout with page marker.
 
 ### todo
 
-- 路由和菜单支持嵌套。
-- 状态管理。
 - 美化 webpack。
